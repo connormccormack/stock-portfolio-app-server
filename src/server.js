@@ -1,5 +1,4 @@
 const app = require('./app')
-const { PORT } = require('./config')
 const knex = require('knex');
 const { PORT, NODE_ENV, DB_URL  } = require('./config');
 
