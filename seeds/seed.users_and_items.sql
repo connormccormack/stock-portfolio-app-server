@@ -1,4 +1,4 @@
-INSERT INTO users (username, passphrase)
+INSERT INTO users (user_name, password)
 VALUES
   ('user1', 'user1password'),
   ('user2', 'user2password'),

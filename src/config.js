@@ -1,4 +1,4 @@
-const { PORT, NODE_ENV, DB_URL, TEST_DB_URL, API_TOKEN } = process.env;
+const { PORT, NODE_ENV, DB_URL, TEST_DB_URL, API_TOKEN, JWT_SECRET } = process.env;
 
 module.exports = {
   PORT: PORT || 8000,
