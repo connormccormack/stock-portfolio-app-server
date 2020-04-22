@@ -1,59 +1,74 @@
-const express = require('express')
-const path = require('path')
-const PortfoliosService = require('./portfolios-service')
+const express = require('express');
+const path = require('path');
+const PortfoliosService = require('./portfolios-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
-const portfoliosRouter = express.Router()
-const jsonBodyParser = express.json()
+const portfoliosRouter = express.Router();
+const jsonBodyParser = express.json();
 
 portfoliosRouter
-  .get('/')
-  .post('/', jsonBodyParser, (req, res, next) => {
-    const { password, user_name } = req.body
-
-    for (const field of ['user_name', 'password'])
-      if (!req.body[field])
-        return res.status(400).json({
-          error: `Missing '${field}' in request body`
-        })
-
-    // TODO: check user_name doesn't start with spaces
-
-    const passwordError = UsersService.validatePassword(password)
-
-    if (passwordError)
-      return res.status(400).json({ error: passwordError })
-
-    UsersService.hasUserWithUserName(
+  .route('/:user_id')
+  .get((req, res, next) => {
+    PortfoliosService.getAssetList(
       req.app.get('db'),
-      user_name
+      req.params.user_id
     )
-      .then(hasUserWithUserName => {
-        if (hasUserWithUserName)
-          return res.status(400).json({ error: `Username already taken` })
-
-        return UsersService.hashPassword(password)
-          .then(hashedPassword => {
-            const newUser = {
-              user_name,
-              password: hashedPassword,
-              // full_name,
-              // nickname,
-              // date_created: 'now()',
-            }
-
-            return UsersService.insertUser(
-              req.app.get('db'),
-              newUser
-            )
-              .then(user => {
-                res
-                  .status(201)
-                  .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                  .json(UsersService.serializeUser(user))
-              })
-          })
+      .then(assets => {
+        res.json(assets);
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
-module.exports = portfoliosRouter
+
+
+
+// .post('/', jsonBodyParser, (req, res, next) => {
+//   const { password, user_name } = req.body
+
+//   for (const field of ['user_name', 'password'])
+//     if (!req.body[field])
+//       return res.status(400).json({
+//         error: `Missing '${field}' in request body`
+//       })
+
+//   // TODO: check user_name doesn't start with spaces
+
+//   const passwordError = UsersService.validatePassword(password)
+
+//   if (passwordError)
+//     return res.status(400).json({ error: passwordError })
+
+//   UsersService.hasUserWithUserName(
+//     req.app.get('db'),
+//     user_name
+//   )
+//     .then(hasUserWithUserName => {
+//       if (hasUserWithUserName)
+//         return res.status(400).json({ error: `Username already taken` })
+
+//       return UsersService.hashPassword(password)
+//         .then(hashedPassword => {
+//           const newUser = {
+//             user_name,
+//             password: hashedPassword,
+//             // full_name,
+//             // nickname,
+//             // date_created: 'now()',
+//           }
+
+//           return UsersService.insertUser(
+//             req.app.get('db'),
+//             newUser
+//           )
+//             .then(user => {
+//               res
+//                 .status(201)
+//                 .location(path.posix.join(req.originalUrl, `/${user.id}`))
+//                 .json(UsersService.serializeUser(user))
+//             })
+//         })
+//     })
+//     .catch(next)
+// })
+
+module.exports = portfoliosRouter;
