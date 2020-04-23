@@ -18,57 +18,31 @@ portfoliosRouter
       })
       .catch(next);
   });
+// .delete();
 
+portfoliosRouter
+  .route('/')
+  .post(requireAuth, jsonBodyParser, (req, res, next) => {
+    console.log('hello');
+    const { assetName, assetClass, user_id } = req.body;
+    const newItem = { asset_name: assetName, asset_class: assetClass, user_id };
 
+    for (const [key, value] of Object.entries(newItem)) {
+      if (value == null) {
+        return res.status(400).json({
+          error: `Missing '${key}' in request body`
+        });
+      }
+    }
+    PortfoliosService.insertItem(
+      req.app.get('db'),
+      newItem
+    )
+      .then(() => {
+        res.send({});
+      })
+      .catch(next);
+  });
 
-
-// .post('/', jsonBodyParser, (req, res, next) => {
-//   const { password, user_name } = req.body
-
-//   for (const field of ['user_name', 'password'])
-//     if (!req.body[field])
-//       return res.status(400).json({
-//         error: `Missing '${field}' in request body`
-//       })
-
-//   // TODO: check user_name doesn't start with spaces
-
-//   const passwordError = UsersService.validatePassword(password)
-
-//   if (passwordError)
-//     return res.status(400).json({ error: passwordError })
-
-//   UsersService.hasUserWithUserName(
-//     req.app.get('db'),
-//     user_name
-//   )
-//     .then(hasUserWithUserName => {
-//       if (hasUserWithUserName)
-//         return res.status(400).json({ error: `Username already taken` })
-
-//       return UsersService.hashPassword(password)
-//         .then(hashedPassword => {
-//           const newUser = {
-//             user_name,
-//             password: hashedPassword,
-//             // full_name,
-//             // nickname,
-//             // date_created: 'now()',
-//           }
-
-//           return UsersService.insertUser(
-//             req.app.get('db'),
-//             newUser
-//           )
-//             .then(user => {
-//               res
-//                 .status(201)
-//                 .location(path.posix.join(req.originalUrl, `/${user.id}`))
-//                 .json(UsersService.serializeUser(user))
-//             })
-//         })
-//     })
-//     .catch(next)
-// })
 
 module.exports = portfoliosRouter;
