@@ -5,6 +5,7 @@ const {CLIENT_ORIGIN} = require('./config');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const portfoliosRouter = require('./portfolios/portfolios-router');
+const assetsRouter = require('./portfolios/assets-router');
 const authRouter = require('./auth/auth-router');
 const usersRouter = require('./users/users-router');
 
@@ -18,6 +19,7 @@ app.use(cors({
 }));
 
 app.use('/api/portfolios', portfoliosRouter);
+app.use('/api/assets', assetsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 

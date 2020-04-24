@@ -16,6 +16,12 @@ const PortfoliosService = {
     return db
       .insert(newItem)
       .into('portfolio_items');
+  },
+  deleteItem(db, item_id) {
+    return db
+      .from('portfolio_items')
+      .where('portfolio_items.id', item_id)
+      .del();
   }
 };
 

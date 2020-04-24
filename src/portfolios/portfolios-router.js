@@ -18,7 +18,16 @@ portfoliosRouter
       })
       .catch(next);
   });
-// .delete();
+// .delete((req, res, next) => {
+//   PortfoliosService.deleteItem(
+//     req.app.get('db'),
+//     req.params.assetId
+//   )
+//     .then(response => {
+//       res.json(response);
+//     })
+//     .catch(next);
+// });
 
 portfoliosRouter
   .route('/')
