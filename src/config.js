@@ -7,5 +7,5 @@ module.exports = {
   TEST_DATABASE_URL: TEST_DATABASE_URL || 'postgresql://postgres@localhost/stock_portfolio_database_test',
   API_TOKEN,
   JWT_SECRET,
-  CLIENT_ORIGIN
+  // CLIENT_ORIGIN
 }
