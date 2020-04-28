@@ -7,8 +7,8 @@ const jsonBodyParser = express.json()
 
 authRouter
   .post('/login', jsonBodyParser, (req, res, next) => {
-    const { user_name, password } = req.body
-    const loginUser = { user_name, password }
+    const { user_name, password } = req.body;
+    const loginUser = { user_name, password };
 
     for (const [key, value] of Object.entries(loginUser))
       if (value == null)
@@ -43,4 +43,4 @@ authRouter
       .catch(next)
   })
 
-module.exports = authRouter
+module.exports = authRouter;
